@@ -1,30 +1,20 @@
-# React + TypeScript + Vite
+# Project "Currency Exchange"
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Vercel link: [click](https://currency-exchange-rust.vercel.app/)
 
-Currently, two official plugins are available:
+## Project Description:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A simple currency exchange application built with React, TypeScript, and Vite. This app allows users to convert between Euros and US Dollars, providing real-time exchange rate updates. It features a clean and intuitive interface, ensuring a smooth user experience.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+## Installation:
+```sh
+git clone https://github.com/xocoee/currency-exchange.git
+cd currency-exchange
+make install
+```
+```sh
+make start
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Demonstration:
+![Screenshot](image/image.png)
