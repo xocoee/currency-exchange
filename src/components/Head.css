@@ -1,0 +1,13 @@
+.header {
+  padding: 0.5em 0;
+}
+
+.container-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container-header h2 {
+  margin: 0;
+}

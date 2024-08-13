@@ -1,81 +1,93 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import exchangeLogo from '/app-logo.png';
 import './App.css';
 
 import { fetchRates, AppDispatch, RootState } from '../store/store';
+interface AppProps {
+  isDarkTheme: boolean;
+}
 
-const App = () => {
+const App: React.FC<AppProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { rateUSD, rateEUR, time } = useSelector((state: RootState) => state.rates);
-  const [inputUSD, setInputUSD] = useState<number>(rateUSD);
-  const [resultEUR, setResultEUR] = useState<number>(rateEUR);
-  const [inputEUR, setInputEUR] = useState<number>(rateEUR);
-  const [resultUSD, setResultUSD] = useState<number>(rateUSD);
+
+  const [inputUSD, setInputUSD] = useState<number | string>(1);
+  const [resultEUR, setResultEUR] = useState<number | undefined>();
+  const [inputEUR, setInputEUR] = useState<number | string>(1);
+  const [resultUSD, setResultUSD] = useState<number | undefined>();
+
   const timeResult = `data on ${time.split('2024')[0] + '2024'}`;
+
   useEffect(() => {
     dispatch(fetchRates());
-    setInputUSD(rateUSD);
-    setResultEUR(rateEUR);
-    setInputEUR(rateEUR);
-    setResultUSD(rateUSD);
+    handleInputChangeEUR({
+      target: { value: inputUSD.toString() },
+    } as React.ChangeEvent<HTMLInputElement>);
+    handleInputChangeUSD({
+      target: { value: inputEUR.toString() },
+    } as React.ChangeEvent<HTMLInputElement>);
   }, [dispatch, rateUSD, rateEUR, time]);
 
   const handleInputChangeEUR = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(event.target.value);
+    const value = event.target.value;
     setInputUSD(value);
-    if (Number.isNaN(value)) {
-      setInputUSD(rateUSD);
-      setResultEUR(parseFloat(rateEUR.toFixed(2)));
+
+    const numericValue = parseFloat(value);
+    if (Number.isNaN(numericValue)) {
+      setResultEUR(undefined);
     } else {
-      setResultEUR(parseFloat((value * rateEUR).toFixed(2)));
+      setResultEUR(parseFloat((numericValue * rateEUR).toFixed(2)));
     }
   };
 
   const handleInputChangeUSD = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(event.target.value);
+    const value = event.target.value;
     setInputEUR(value);
-    if (Number.isNaN(value)) {
-      setInputEUR(rateEUR);
-      setResultUSD(parseFloat(rateUSD.toFixed(2)));
+
+    const numericValue = parseFloat(value);
+    if (Number.isNaN(numericValue)) {
+      setResultUSD(undefined);
     } else {
-      setResultUSD(parseFloat((value / rateEUR).toFixed(2)));
+      setResultUSD(parseFloat((numericValue / rateEUR).toFixed(2)));
     }
   };
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={exchangeLogo} className="logo" alt="Vite logo" />
-        </a>
-      </div>
-      <h1>Сurrency-Exchange</h1>
-      <h4>{rateUSD} United States Dollar equals</h4>
-      <h2>{rateEUR} Euro</h2>
-      <h4>{timeResult}</h4>
-      <div className="container">
-        <h2>USD</h2>
-        <input
-          type="number"
-          className="input"
-          value={inputUSD}
-          onChange={handleInputChangeEUR}
-          placeholder="Enter amount in EUR"
-        />
-        <h2 className="result">= {resultEUR} EUR</h2>
-      </div>
-      <div className="container">
-        <h2>EUR</h2>
-        <input
-          type="number"
-          className="input"
-          value={inputEUR}
-          onChange={handleInputChangeUSD}
-          placeholder="Enter amount in USD"
-        />
-        <h2 className="result">= {resultUSD} USD</h2>
+      <div className="app-content">
+        <div>
+          <img src={exchangeLogo} className="logo" alt="Home logo" />
+        </div>
+        <div className="text">
+          <h1>Сurrency-Exchange</h1>
+          <h4>{rateUSD} United States Dollar equals</h4>
+          <h2>{rateEUR} Euro</h2>
+          <h4>{timeResult}</h4>
+        </div>
+        <div className="container">
+          <h2>USD</h2>
+          <input
+            type="text"
+            className="input"
+            value={inputUSD}
+            onChange={handleInputChangeEUR}
+            placeholder="Enter amount in EUR"
+          />
+          <h2 className="result">= {resultEUR} EUR</h2>
+        </div>
+        <div className="container">
+          <h2>EUR</h2>
+          <input
+            type="text"
+            className="input"
+            value={inputEUR}
+            onChange={handleInputChangeUSD}
+            placeholder="Enter amount in USD"
+          />
+          <h2 className="result">= {resultUSD} USD</h2>
+        </div>
       </div>
     </>
   );
