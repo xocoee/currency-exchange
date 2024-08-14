@@ -22,7 +22,7 @@ export const fetchRates = createAsyncThunk('rates/fetchRates', async () => {
   return {
     rateUSD: data.conversion_rates.USD,
     rateEUR: data.conversion_rates.EUR,
-    time: data.time_last_update_utc,
+    time: data.time_last_update_unix,
   };
 });
 

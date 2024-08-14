@@ -1,95 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
+import Head from './Head';
+import Home from './Home';
+import { store } from '../store/store';
+import i18n from '../i18next/i18next.js';
 
-import exchangeLogo from '/app-logo.png';
-import './App.css';
+const App: React.FC = () => {
+  const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
 
-import { fetchRates, AppDispatch, RootState } from '../store/store';
-interface AppProps {
-  isDarkTheme: boolean;
-}
-
-const App: React.FC<AppProps> = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { rateUSD, rateEUR, time } = useSelector((state: RootState) => state.rates);
-
-  const [inputUSD, setInputUSD] = useState<number | string>(1);
-  const [resultEUR, setResultEUR] = useState<number | undefined>();
-  const [inputEUR, setInputEUR] = useState<number | string>(1);
-  const [resultUSD, setResultUSD] = useState<number | undefined>();
-
-  const timeResult = `data on ${time.split('2024')[0] + '2024'}`;
-
-  useEffect(() => {
-    dispatch(fetchRates());
-    handleInputChangeEUR({
-      target: { value: inputUSD.toString() },
-    } as React.ChangeEvent<HTMLInputElement>);
-    handleInputChangeUSD({
-      target: { value: inputEUR.toString() },
-    } as React.ChangeEvent<HTMLInputElement>);
-  }, [dispatch, rateUSD, rateEUR, time]);
-
-  const handleInputChangeEUR = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setInputUSD(value);
-
-    const numericValue = parseFloat(value);
-    if (Number.isNaN(numericValue)) {
-      setResultEUR(undefined);
-    } else {
-      setResultEUR(parseFloat((numericValue * rateEUR).toFixed(2)));
-    }
+  const toggleTheme = () => {
+    setIsDarkTheme(!isDarkTheme);
   };
 
-  const handleInputChangeUSD = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setInputEUR(value);
-
-    const numericValue = parseFloat(value);
-    if (Number.isNaN(numericValue)) {
-      setResultUSD(undefined);
-    } else {
-      setResultUSD(parseFloat((numericValue / rateEUR).toFixed(2)));
-    }
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'ua' : 'en';
+    i18n.changeLanguage(newLang);
   };
 
   return (
-    <>
-      <div className="app-content">
-        <div>
-          <img src={exchangeLogo} className="logo" alt="Home logo" />
-        </div>
-        <div className="text">
-          <h1>Сurrency-Exchange</h1>
-          <h4>{rateUSD} United States Dollar equals</h4>
-          <h2>{rateEUR} Euro</h2>
-          <h4>{timeResult}</h4>
-        </div>
-        <div className="container">
-          <h2>USD</h2>
-          <input
-            type="text"
-            className="input"
-            value={inputUSD}
-            onChange={handleInputChangeEUR}
-            placeholder="Enter amount in EUR"
+    <Provider store={store}>
+      <I18nextProvider i18n={i18n}>
+        <header className={`header ${isDarkTheme ? 'dark-theme-head' : 'light-theme-head'}`}>
+          <Head
+            isDarkTheme={isDarkTheme}
+            toggleTheme={toggleTheme}
+            toggleLanguage={toggleLanguage}
           />
-          <h2 className="result">= {resultEUR} EUR</h2>
+        </header>
+
+        <div className={`app-container ${isDarkTheme ? 'dark-theme-app' : 'light-theme-app'}`}>
+          <Home isDarkTheme={isDarkTheme} />
         </div>
-        <div className="container">
-          <h2>EUR</h2>
-          <input
-            type="text"
-            className="input"
-            value={inputEUR}
-            onChange={handleInputChangeUSD}
-            placeholder="Enter amount in USD"
-          />
-          <h2 className="result">= {resultUSD} USD</h2>
-        </div>
-      </div>
-    </>
+      </I18nextProvider>
+    </Provider>
   );
 };
 

@@ -1,10 +1,10 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Main from './components/Main.tsx';
+import Init from './components/App.tsx';
 import './index.css';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Main />
-  </React.StrictMode>,
-);
+const app = () => {
+  const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+  root.render(<Init />);
+};
+
+app();
