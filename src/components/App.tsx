@@ -13,20 +13,11 @@ const App: React.FC = () => {
     setIsDarkTheme(!isDarkTheme);
   };
 
-  const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'ua' : 'en';
-    i18n.changeLanguage(newLang);
-  };
-
   return (
     <Provider store={store}>
       <I18nextProvider i18n={i18n}>
         <header className={`header ${isDarkTheme ? 'dark-theme-head' : 'light-theme-head'}`}>
-          <Head
-            isDarkTheme={isDarkTheme}
-            toggleTheme={toggleTheme}
-            toggleLanguage={toggleLanguage}
-          />
+          <Head isDarkTheme={isDarkTheme} toggleTheme={toggleTheme} />
         </header>
 
         <div className={`app-container ${isDarkTheme ? 'dark-theme-app' : 'light-theme-app'}`}>

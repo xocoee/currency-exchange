@@ -15,3 +15,18 @@
   font-weight: bold; 
 }
 
+.language-switcher {
+  display: flex;
+  margin-right: 10px;
+}
+
+.lang-button {
+  border: 0px solid #ccc;
+  border-radius: 5px;
+  padding: 10px 10px;
+  margin: 0 1px;
+}
+
+.lang-button.active {
+  color: #F2CA50;
+}

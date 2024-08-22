@@ -5,20 +5,49 @@ import { useTranslation } from 'react-i18next';
 interface HeadProps {
   isDarkTheme: boolean;
   toggleTheme: () => void;
-  toggleLanguage: () => void;
 }
 
-const Head: React.FC<HeadProps> = ({ isDarkTheme, toggleTheme, toggleLanguage }) => {
-  const { t } = useTranslation();
+const Head: React.FC<HeadProps> = ({ isDarkTheme, toggleTheme }) => {
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lang: string) => {
+    i18n.changeLanguage(lang);
+  };
+
+  const handleThemeChange = (theme: 'light' | 'dark') => {
+    if ((isDarkTheme && theme === 'light') || (!isDarkTheme && theme === 'dark')) {
+      toggleTheme();
+    }
+  };
 
   return (
     <div className="container-header">
-      <div onClick={toggleLanguage} style={{ cursor: 'pointer' }}>
-        <div className="text">{t('head.language')}</div>
+      <div className="language-switcher">
+        <button
+          className={`${isDarkTheme ? 'light-theme-head' : 'dark-theme-head'} lang-button ${i18n.language === 'en' ? 'active' : ''}`}
+          onClick={() => changeLanguage('en')}
+        >
+          EN
+        </button>
+        <button
+          className={`${isDarkTheme ? 'light-theme-head' : 'dark-theme-head'} lang-button ${i18n.language === 'ua' ? 'active' : ''}`}
+          onClick={() => changeLanguage('ua')}
+        >
+          UA
+        </button>
       </div>
-      <div onClick={toggleTheme} style={{ cursor: 'pointer' }}>
-        <div className="text">{isDarkTheme ? t('head.light') : t('head.dark')}</div>
-      </div>
+      <button
+        className={`${isDarkTheme ? 'light-theme-head' : 'dark-theme-head'} lang-button ${!isDarkTheme ? 'active' : ''}`}
+        onClick={() => handleThemeChange('light')}
+      >
+        {t('head.light')}
+      </button>
+      <button
+        className={`${isDarkTheme ? 'light-theme-head' : 'dark-theme-head'} lang-button ${isDarkTheme ? 'active' : ''}`}
+        onClick={() => handleThemeChange('dark')}
+      >
+        {t('head.dark')}
+      </button>
     </div>
   );
 };
